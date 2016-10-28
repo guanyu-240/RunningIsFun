@@ -13,6 +13,7 @@ import json
 
 # from pypi
 import requests
+from oauth2client.client import OAuth2WebServerFlow
 
 
 # constants
@@ -20,6 +21,7 @@ AUTHENTICATION_URL = "https://www.strava.com/oauth/authorize"
 ATHLETE_URL = "https://www.strava.com/api/v3/athlete"
 ATHLETES_URL = "https://www.strava.com/api/v3/athletes/{}"
 ACTIVITIES_URL = "https://www.strava.com/api/v3/activities/{}"
+ATHLETE_ACTIVITIES_URL = "https://www.strava.com/api/v3/athlete/activities"
 CLUBS_URL = "https://www.strava.com/api/v3/clubs/{}"
 
 
@@ -44,7 +46,6 @@ class Strava():
     self.__clientID = auth_cfg.getint("strava_api", "client_id")
     self.__redirectURI = auth_cfg.get("strava_api", "redirect_uri")
     self.__secretKey = auth_cfg.get("strava_api", "secret_key")
-    self.__accessToken = auth_cfg.get("strava_api", "access_token")
     self.__requestAuthentication()
 
   def __getAuthConfig(self, cfg_file):
@@ -61,7 +62,9 @@ class Strava():
               'approval_prompt': 'force'}
     r = requests.get(AUTHENTICATION_URL, params)
     r.raise_for_status()
-    
+
+  def setAccessToken(self, access_token):
+    self.__accessToken = access_token
 
   # Methods for getting athlete information
   def getAthleteInfoSelf(self):
@@ -95,6 +98,19 @@ class Strava():
     r.raise_for_status()
     return r.json()
 
+  def listAthleteActivities(self, before, after, page, per_page):
+    """
+    Get a list of activities
+    """
+    params = {'access_token': self.__accessToken}
+    if before: params['before'] = before
+    if after: params['after'] = after
+    if page: params['page'] = page
+    if per_page: params['per_page'] = per_page
+    r = requests.get(ATHLETE_ACTIVITIES_URL, params)
+    return r.json()
+
+
   # Methods for getting club information
   def getClub(self, club_id):
     """
@@ -104,4 +120,5 @@ class Strava():
     r =  requests.get(CLUBS_URL.format(club_id), params)
     r.raise_for_status()
     return r.json()
+
 
