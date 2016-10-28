@@ -9,6 +9,7 @@
 import os
 import ConfigParser
 import urllib
+import json
 
 # from pypi
 import requests
@@ -18,7 +19,9 @@ import requests
 AUTHENTICATION_URL = "https://www.strava.com/oauth/authorize"
 ATHLETE_URL = "https://www.strava.com/api/v3/athlete"
 ATHLETES_URL = "https://www.strava.com/api/v3/athletes/{}"
-ACTIVITIES_URL = "https://www.strava.com/api/v3/activities{}"
+ACTIVITIES_URL = "https://www.strava.com/api/v3/activities/{}"
+CLUBS_URL = "https://www.strava.com/api/v3/clubs/{}"
+
 
 ################################################################################
 class Strava():
@@ -91,3 +94,14 @@ class Strava():
     r = requests.get(ACTIVITIESS_URL.format(activity_id), params)
     r.raise_for_status()
     return r.json()
+
+  # Methods for getting club information
+  def getClub(self, club_id):
+    """
+    Get the information of a club
+    """
+    params = {'access_token': self.__accessToken}
+    r =  requests.get(CLUBS_URL.format(club_id), params)
+    r.raise_for_status()
+    return r.json()
+
