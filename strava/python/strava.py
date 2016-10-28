@@ -15,8 +15,9 @@ import requests
 
 
 # constants
+AUTHENTICATION_URL = "https://www.strava.com/oauth/authorize"
 ATHLETE_URL = "https://www.strava.com/api/v3/athlete"
-ATHLETES_URL = "https://www.strava.com/api/v3/athlete/{}"
+ATHLETES_URL = "https://www.strava.com/api/v3/athletes/{}"
 ACTIVITIES_URL = "https://www.strava.com/api/v3/activities{}"
 
 ################################################################################
@@ -41,12 +42,23 @@ class Strava():
     self.__redirectURI = auth_cfg.get("strava_api", "redirect_uri")
     self.__secretKey = auth_cfg.get("strava_api", "secret_key")
     self.__accessToken = auth_cfg.get("strava_api", "access_token")
+    self.__requestAuthentication()
 
   def __getAuthConfig(self, cfg_file):
     auth_cfg = ConfigParser.RawConfigParser()
     auth_cfg.read(cfg_file)
     return auth_cfg
 
+  def __requestAuthentication(self):
+    params = {'client_id': self.__clientID, \
+              'redirect_uri': self.__redirectURI, \
+              'response_type': 'code', \
+              'scope': 'write', \
+              'state': 'mystate', \
+              'approval_prompt': 'force'}
+    r = requests.get(AUTHENTICATION_URL, params)
+    r.raise_for_status()
+    
 
   # Methods for getting athlete information
   def getAthleteInfoSelf(self):
