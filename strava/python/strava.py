@@ -13,11 +13,9 @@ import json
 
 # from pypi
 import requests
-from oauth2client.client import OAuth2WebServerFlow
 
 
 # constants
-AUTHENTICATION_URL = "https://www.strava.com/oauth/authorize"
 ATHLETE_URL = "https://www.strava.com/api/v3/athlete"
 ATHLETES_URL = "https://www.strava.com/api/v3/athletes/{}"
 ACTIVITIES_URL = "https://www.strava.com/api/v3/activities/{}"
@@ -31,39 +29,7 @@ class Strava():
   '''
   Strava access methods
   '''
-
-  def __init__(self, cfg_file):
-    """
-    Initialize, takes authorization config file
-    Format:
-    [strava_api]
-    client_id=<client id obtained after app registration>
-    redirect_uri=<URL to which the user will be redirected with the auth code>
-    secret_key=<secret key obtained after app registration>
-    accessToken=<access token obtained after app registration or authorization>
-    """
-    auth_cfg = self.__getAuthConfig(cfg_file)
-    self.__clientID = auth_cfg.getint("strava_api", "client_id")
-    self.__redirectURI = auth_cfg.get("strava_api", "redirect_uri")
-    self.__secretKey = auth_cfg.get("strava_api", "secret_key")
-    self.__requestAuthentication()
-
-  def __getAuthConfig(self, cfg_file):
-    auth_cfg = ConfigParser.RawConfigParser()
-    auth_cfg.read(cfg_file)
-    return auth_cfg
-
-  def __requestAuthentication(self):
-    params = {'client_id': self.__clientID, \
-              'redirect_uri': self.__redirectURI, \
-              'response_type': 'code', \
-              'scope': 'write', \
-              'state': 'mystate', \
-              'approval_prompt': 'force'}
-    r = requests.get(AUTHENTICATION_URL, params)
-    r.raise_for_status()
-
-  def setAccessToken(self, access_token):
+  def __init__(self, access_token):
     self.__accessToken = access_token
 
   # Methods for getting athlete information
