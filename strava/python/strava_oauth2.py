@@ -26,6 +26,9 @@ class StravaAuth():
     return auth_cfg
 
   def auth_url(self):
+    """
+    Return the authentication URL with parameters
+    """
     params_list = (('client_id', self.__clientID), \
               ('redirect_uri', self.__redirectURI), \
               ('response_type', 'code'), \
