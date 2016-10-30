@@ -1,7 +1,18 @@
+#!/usr/bin/python
+################################################################################
+# StravaAuth
+# Methods of strava API authentication
+#
+################################################################################
+# standard imports
 import urllib
 import ConfigParser
+# pypi
+import requests
 
-STRAVA_AUTH_URL = "https://www.strava.com/oauth/authorizei?{}"
+
+STRAVA_AUTH_URL = "https://www.strava.com/oauth/authorize?{}"
+STRAVA_AUTHTOKEN_URL = "https://www.strava.com/oauth/token"
 
 class StravaAuth():
 
@@ -37,3 +48,15 @@ class StravaAuth():
               ('approval_prompt', 'force'))
     params = urllib.urlencode(params_list, doseq=True)
     return STRAVA_AUTH_URL.format(params)
+
+  def token_exchange(self, auth_code):
+    """
+    Get the token exchange
+    """
+    params = {'client_id': self.__clientID, \
+              'client_secret': self.__clientSecret, \
+              'code': auth_code}
+    r = requests.post(STRAVA_AUTHTOKEN_URL, data=params)
+    print r.text
+    #r.raise_for_status()
+    return r.json()
