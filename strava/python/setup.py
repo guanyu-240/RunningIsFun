@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from distutils.core import setup
+from setuptools import setup
 
 setup(
   name = "strava",
@@ -22,6 +22,9 @@ setup(
   package_dir = {'stravalib': '.'},
   packages = ['stravalib'],
   description = 'Strava API Python wrapper',
+  install_requires=[
+          'requests',
+  ],
   author = 'Guanyu Wang',
   author_email = 'guanyuwang.cs@gmail.com'
 )
