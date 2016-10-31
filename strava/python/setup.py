@@ -26,5 +26,6 @@ setup(
           'requests',
   ],
   author = 'Guanyu Wang',
-  author_email = 'guanyuwang.cs@gmail.com'
+  author_email = 'guanyuwang.cs@gmail.com',
+  license = 'Apache License, Version 2.0'
 )
