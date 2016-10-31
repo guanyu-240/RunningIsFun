@@ -26,12 +26,15 @@ CLUBS_URL = "https://www.strava.com/api/v3/clubs/{}"
 ################################################################################
 class Strava():
 ################################################################################
-  '''
+  """
   Strava access methods
-  '''
+  """
   def __init__(self, access_token):
     self.__accessToken = access_token
-
+  
+  """
+  Basic queries
+  """
   # Methods for getting athlete information
   def getAthleteInfoSelf(self):
     """
