@@ -64,7 +64,7 @@ class Strava():
   def getAthleteInfo(self, user_id):
     """
     Get the information of an athlete
-    user_id: strava id for the athlete
+    user_id: integer, strava id for the athlete
     """
     params = {'access_token': self.__accessToken}
     r = requests.get(ATHLETES_URL.format(user_id), params)
@@ -76,15 +76,20 @@ class Strava():
   def getAnActivity(self, activity_id):
     """
     Get the information of an activity
+    activity_id: integer, activity id
     """
     params = {'access_token': self.__accessToken}
     r = requests.get(ACTIVITIESS_URL.format(activity_id), params)
     r.raise_for_status()
     return r.json()
 
-  def listAthleteActivities(self, before, after, page, per_page):
+  def listAthleteActivities(self, before=None, after=None, page=None, per_page=None):
     """
     Get a list of activities
+    before:   integer, seconds since UNIX epoch
+    after:    integer, seconds since UNIX epoch
+    page:     integer
+    per_page:	integer
     """
     params = {'access_token': self.__accessToken}
     if before: params['before'] = before
@@ -94,20 +99,51 @@ class Strava():
     r = requests.get(ATHLETE_ACTIVITIES_URL, params)
     return r.json()
 
+  def listFriendsActivities(self, before=None, page=None, per_page=None):
+    """
+    Get a list of friends' activities
+    before:   integer, seconds since UNIX epoch
+    page:     integer
+    per_page: integer
+    """
+    params = {'access_token': self.__accessToken}
+    if before: params['before'] = before
+    if page: params['page'] = page
+    if per_page: params['per_page'] = per_page
+    r = requests.get(ACTIVITIESS_URL.format('following'), params)
+    return r.json()
 
   # Methods for getting club information
   def getClub(self, club_id):
     """
     Get the information of a club
+    club_id: integer
     """
     params = {'access_token': self.__accessToken}
     r =  requests.get(CLUBS_URL.format(club_id, ''), params)
     r.raise_for_status()
     return r.json()
 
+  def listClubMembers(self, club_id, page=None, per_page=None):
+    """
+    Get the list of club members
+    club_id:  integer
+    page:     integer
+    per_page: integer
+    """
+    params = {'access_token': self.__accessToken}
+    if page: params['page'] = page
+    if per_page: params['per_page'] = per_page
+    r =  requests.get(CLUBS_URL.format(club_id, '/members'), params) 
+    r.raise_for_status()
+    return r.json()
+
   def getClubActivities(self, club_id, before=None, page=None, per_page=None):
     """
     Get the list of club activities
+    before:   integer, seconds since UNIX epoch
+    page:     integer
+    per_page: integer
     """
     params = {'access_token': self.__accessToken}
     if before: params['before'] = before
@@ -120,13 +156,26 @@ class Strava():
   """
   Commonly used complex queries
   """
-  def getClubActivitiesCurWeek(self, club_id):
+  def getClubActivitiesCurWeek(self, club_id, per_page=200):
     """
     Get the list of club activities in the current week
+    club_id: integer
     """
     club_activities = self.getClubActivities(club_id)
     week_start = get_start_of_week()
     club_activities_curweek = filter( \
             lambda x: convert_datestr(x['start_date']).date() >= week_start, \
+            club_activities)
+    return club_activities_curweek
+
+  def getClubActivitiesToday(self, club_id):
+    """
+    Get the list of club activities today
+    club_id: integer
+    """
+    club_activities = self.getClubActivities(club_id, per_page=50)
+    week_start = get_start_of_week()
+    club_activities_curweek = filter( \
+            lambda x: convert_datestr(x['start_date']).date() >= date.today(), \
             club_activities)
     return club_activities_curweek
