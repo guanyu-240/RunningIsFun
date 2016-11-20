@@ -110,7 +110,7 @@ class Strava():
     if after: params['after'] = after
     if page: params['page'] = page
     if per_page: params['per_page'] = per_page
-    r = requests.get(ATHLETE_ACTIVITIES_URL, params)
+    r = requests.get(ATHLETE_ACTIVITIES_URL, params=params)
     return r.json()
 
   def listFriendsActivities(self, before=None, page=None, per_page=None):
@@ -124,7 +124,7 @@ class Strava():
     if before: params['before'] = before
     if page: params['page'] = page
     if per_page: params['per_page'] = per_page
-    r = requests.get(ACTIVITIESS_URL.format('following'), params)
+    r = requests.get(ACTIVITIESS_URL.format('following'), params=params)
     return r.json()
 
   # Methods for getting club information
@@ -134,7 +134,7 @@ class Strava():
     club_id: integer
     """
     params = {'access_token': self.__accessToken}
-    r =  requests.get(CLUBS_URL.format(club_id, ''), params)
+    r =  requests.get(CLUBS_URL.format(club_id, ''), params=params)
     r.raise_for_status()
     return r.json()
 
@@ -148,7 +148,7 @@ class Strava():
     params = {'access_token': self.__accessToken}
     if page: params['page'] = page
     if per_page: params['per_page'] = per_page
-    r =  requests.get(CLUBS_URL.format(club_id, '/members'), params) 
+    r =  requests.get(CLUBS_URL.format(club_id, '/members'), params=params) 
     r.raise_for_status()
     return r.json()
 
@@ -163,7 +163,7 @@ class Strava():
     if before: params['before'] = before
     if page: params['page'] = page
     if per_page: params['per_page'] = per_page
-    r =  requests.get(CLUBS_URL.format(club_id, '/activities'), params)
+    r =  requests.get(CLUBS_URL.format(club_id, '/activities'), params=params)
     r.raise_for_status()
     ret = r.json()
     for x in ret:
