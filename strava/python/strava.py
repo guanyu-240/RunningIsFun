@@ -164,7 +164,8 @@ class Strava():
     club_activities = self.getClubActivities(club_id)
     week_start = get_start_of_week()
     club_activities_curweek = filter( \
-            lambda x: convert_datestr(x['start_date']).date() >= week_start, \
+            lambda x: convert_datestr(x['start_date']).date() >= week_start and \
+                      x['type'] == 'Run', \
             club_activities)
     return club_activities_curweek
 
@@ -176,6 +177,7 @@ class Strava():
     club_activities = self.getClubActivities(club_id, per_page=50)
     week_start = get_start_of_week()
     club_activities_curweek = filter( \
-            lambda x: convert_datestr(x['start_date']).date() >= date.today(), \
+            lambda x: convert_datestr(x['start_date']).date() >= date.today() and \
+                      x['type'] == 'Run', \
             club_activities)
     return club_activities_curweek
