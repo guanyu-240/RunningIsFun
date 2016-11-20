@@ -14,6 +14,7 @@ from datetime import date,timedelta,datetime
 
 # from pypi
 import requests
+from pytz import timezone
 
 
 # constants
@@ -24,19 +25,22 @@ ATHLETE_ACTIVITIES_URL = "https://www.strava.com/api/v3/athlete/activities"
 CLUBS_URL = "https://www.strava.com/api/v3/clubs/{}{}"
 
 # functions
-def get_start_of_week():
+def get_start_of_week(time_zone='UTC'):
   """
   Get the start of current week
   """
-  today = date.today()
+  today = datetime.now(timezone(time_zone))
   week_start = today - timedelta(today.weekday())
-  return week_start
+  return week_start.date()
 
-def convert_datestr(date_str):
+def convert_datestr(date_str, time_zone='UTC'):
   """
   Format the datetime string
   """
-  return datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%SZ')
+  t = datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%SZ')
+  t = timezone('UTC').localize(t)
+  t = t.astimezone(timezone(time_zone))
+  return t
 
 def process_activity(activity, unit='mi'):
   """
@@ -134,7 +138,7 @@ class Strava():
     r.raise_for_status()
     return r.json()
 
-  def listClubMembers(self, club_id, page=None, per_page=None):
+  def listClubMembers(self, club_id, page=None, per_page=200):
     """
     Get the list of club members
     club_id:  integer
@@ -148,7 +152,7 @@ class Strava():
     r.raise_for_status()
     return r.json()
 
-  def getClubActivities(self, club_id, before=None, page=None, per_page=None):
+  def getClubActivities(self, club_id, before=None, page=None, per_page=None, time_zone='UTC'):
     """
     Get the list of club activities
     before:   integer, seconds since UNIX epoch
@@ -161,33 +165,36 @@ class Strava():
     if per_page: params['per_page'] = per_page
     r =  requests.get(CLUBS_URL.format(club_id, '/activities'), params)
     r.raise_for_status()
-    return r.json()
+    ret = r.json()
+    for x in ret:
+      x['start_date'] = convert_datestr(x['start_date'], time_zone)
+    return ret
 
   """
   Commonly used complex queries
   """
-  def getClubActivitiesCurWeek(self, club_id, per_page=200):
+  def getClubActivitiesCurWeek(self, club_id, time_zone='UTC'):
     """
     Get the list of club activities in the current week
     club_id: integer
     """
-    club_activities = self.getClubActivities(club_id)
-    week_start = get_start_of_week()
+    club_activities = self.getClubActivities(club_id, per_page=200, time_zone=time_zone)
+    week_start = get_start_of_week(time_zone)
     club_activities_curweek = filter( \
-            lambda x: convert_datestr(x['start_date']).date() >= week_start and \
+            lambda x: x['start_date'].date() >= week_start and \
                       x['type'] == 'Run', \
             club_activities)
     return club_activities_curweek
 
-  def getClubActivitiesToday(self, club_id):
+  def getClubActivitiesToday(self, club_id, time_zone='UTC'):
     """
     Get the list of club activities today
     club_id: integer
     """
-    club_activities = self.getClubActivities(club_id, per_page=50)
+    club_activities = self.getClubActivities(club_id, per_page=50, time_zone=time_zone)
     week_start = get_start_of_week()
     club_activities_curweek = filter( \
-            lambda x: convert_datestr(x['start_date']).date() >= date.today() and \
+            lambda x: x['start_date'].date() >= date.today() and \
                       x['type'] == 'Run', \
             club_activities)
     return club_activities_curweek
