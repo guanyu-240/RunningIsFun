@@ -49,7 +49,11 @@ def process_activity(activity, unit='mi'):
   if unit == 'km':
     activity['distance'] = activity['distance']/1000.0
   else: activity['distance'] = activity['distance']/1609.0
-  activity['avg_pace'] = 60.0*activity['distance']/float(activity['moving_time'])
+  moving_time = float(activity['moving_time'])
+  if moving_time > 0:
+    activity['avg_pace'] = 60.0*activity['distance']/float(activity['moving_time'])
+  else:
+    activity['avg_pace'] = 999
   return activity
 
 ################################################################################
