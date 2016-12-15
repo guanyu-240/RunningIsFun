@@ -1,5 +1,8 @@
 #!/usr/bin/python
 
+MARATHON_KM = 42.195
+MARATHON_MI = 26.2188
+
 def pace_str(seconds):
   return "{}:{:02d}".format(seconds/60, seconds%60)
 

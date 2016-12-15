@@ -22,7 +22,7 @@ d_target: Float, distance of the race to be predicted
 unit: 'mi' or 'km'
 """
 def time_eq(t_given, d_given, d_target, unit='mi'):
-  if unit == km:
+  if unit == 'km':
     d_given /= MI_KM_RATIO
     d_target /= MI_KM_RATIO
   factor = 1.06
@@ -64,7 +64,6 @@ unit: 'mi' or 'km'
 def vdot(dist, time, unit="mi"):
   dist *= 1000.0
   if unit == 'mi': dist *= MI_KM_RATIO
-  print dist
   return vo2(dist, time)/vo2max_percent(time)
 
 """
@@ -75,6 +74,6 @@ def pace_calc(percent_HRMax, vdot, unit='mi'):
   pace = 1609.344*60.0 / (29.54+5.000663*adjusted_vdot - \
             0.007546*math.pow(adjusted_vdot, 2))
   if unit == 'km': pace /= 1.609344
-  return pace
+  return int(round(pace))
 
 
