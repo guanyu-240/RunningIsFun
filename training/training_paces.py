@@ -35,10 +35,10 @@ def hansons_paces(dist, time, unit='mi'):
   mp = int(round((time_marathon/MARATHON_KM)*ratio))
   # calculate easy run paces
   vd = vdot(dist, time, unit)
-  pace_recovery = pace_calc(PCT_RECOVERY, vd, unit='mi')
-  pace_ea_1 = pace_calc(PCT_EA1, vd, unit='mi')
-  pace_ea_2 = pace_calc(PCT_EA2, vd, unit='mi')
-  pace_ma = pace_calc(PCT_MA, vd, unit='mi')
+  pace_recovery = pace_calc(PCT_RECOVERY, vd, unit)
+  pace_ea_1 = pace_calc(PCT_EA1, vd, unit)
+  pace_ea_2 = pace_calc(PCT_EA2, vd, unit)
+  pace_ma = pace_calc(PCT_MA, vd, unit)
   ret = [TrainingPace("5k", pace_5k, None),
          TrainingPace("10k", pace_10k, None),
          TrainingPace("Strength", mp-10, None),
@@ -73,7 +73,49 @@ def am_paces(time, unit='mi'):
   pace_15k = int(round((time_15k/15.0)*ratio))
   hmp = int(round((2*time_half/MARATHON_KM)*ratio))
   ret = [TrainingPace("VO2Max", pace_5k, None),
-         TrainingPace("LT_Fast", pace_15k, None),
-         TrainingPace("LT_Slow", hmp, None),
+         TrainingPace("LT Fast", pace_15k, None),
+         TrainingPace("LT Slow", hmp, None),
          TrainingPace("Long", int(round(mp*1.2)), int(round(mp*1.1)))]
+  return ret
+
+"""
+Jack Daniels
+"""
+################################################################################
+JD_PCT_RECOVERY = 0.65
+JD_PCT_EA1 = 0.7
+JD_PCT_EA2 = 0.73
+JD_PCT_EA3 = 0.75
+JD_PCT_LT = 0.88
+"""
+Calculate the training paces recommended in Jack Daniels Running formula
+Given a race time or a goal time
+Params:
+dist: float, race distance
+time: integer, race time in seconds
+unit: 'mi' or 'km'
+"""
+def jack_daniels_paces(dist, time, unit='mi'):
+  dist_km = dist
+  if unit == 'mi': dist_km *= MI_KM_RATIO
+  time_marathon = time_eq(time, dist_km, MARATHON_KM, 'km')
+  ratio = (MI_KM_RATIO if unit == 'mi' else 1)
+  mp = int(round((time_marathon/MARATHON_KM)*ratio))
+  # calculate easy run paces
+  vd = vdot(dist, time, unit)
+  pace_recovery = pace_calc(PCT_RECOVERY, vd, unit=unit)
+  pace_ea_1 = pace_calc(JD_PCT_EA1, vd, unit)
+  pace_ea_2 = pace_calc(JD_PCT_EA2, vd, unit)
+  pace_ea_3 = pace_calc(JD_PCT_EA3, vd, unit)
+  pace_ma = pace_ea_3 + (mp-pace_ea_3)/3
+  pace_ha = mp - (mp-pace_ea_3)/3
+  pace_lt = pace_calc(JD_PCT_LT, vd, unit, 'vo2max')
+  ret = [TrainingPace("Recovery", pace_recovery, None),
+         TrainingPace("Easy Aerobic 1", pace_ea_1, None),
+         TrainingPace("Easy Aerobic 2", pace_ea_2, None),
+         TrainingPace("Easy Aerobic 3", pace_ea_3, None),
+         TrainingPace("Mid Aerobic", pace_ma, None),
+         TrainingPace("High Aerobic", pace_ha, None),
+         TrainingPace("Marathon Pace", mp, None),
+         TrainingPace("Lactate Threshold", pace_lt, None)]
   return ret
