@@ -4,8 +4,13 @@ import math
 """
 Jack Daniels Running Formula
 """
+# Constants
 ################################################################################
 MI_KM_RATIO = 1.609344
+
+# Percent of max heart rate
+PCT_LT = 0.88
+
 """
 Given a race time or race goal time, get the equivalant time of
 a race of another distance
@@ -52,10 +57,14 @@ def vo2max_percent(time):
 """
 Calculate VDOT
 params:
-distance: float, in meters
+distance: float
 time: int, in seconds
+unit: 'mi' or 'km'
 """
 def vdot(dist, time, unit="mi"):
+  dist *= 1000.0
+  if unit == 'mi': dist *= MI_KM_RATIO
+  print dist
   return vo2(dist, time)/vo2max_percent(time)
 
 """
