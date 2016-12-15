@@ -72,8 +72,11 @@ params:
 percent_HRMax: float, percentage of max heart rate
 vdot: float, vdot value
 """
-def pace_calc(percent_HRMax, vdot, unit='mi'):
-  adjusted_vdot = vdot*(0.59+0.41*(percent_HRMax-0.65)/0.35)
+def pace_calc(percent_max, vdot, unit='mi', percent_of='hr'):
+  # first convert to % of VO2Max
+  if percent_of == 'hr':
+    percent_max = 0.59+0.41*(percent_max-0.65)/0.35
+  adjusted_vdot = vdot*percent_max
   pace = 1609.344*60.0 / (29.54+5.000663*adjusted_vdot - \
             0.007546*math.pow(adjusted_vdot, 2))
   if unit == 'km': pace /= 1.609344
