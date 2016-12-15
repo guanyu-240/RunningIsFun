@@ -68,6 +68,9 @@ def vdot(dist, time, unit="mi"):
 
 """
 Calculate the corresponding training pace given % of heart rate and vdot
+params:
+percent_HRMax: float, percentage of max heart rate
+vdot: float, vdot value
 """
 def pace_calc(percent_HRMax, vdot, unit='mi'):
   adjusted_vdot = vdot*(0.59+0.41*(percent_HRMax-0.65)/0.35)
