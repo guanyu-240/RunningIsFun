@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<plans>
+  <plan name="Jack Daniels">
+    <trainings>
+      <training name="Recovery">
+        <pace rule="1" value="0.65" />
+        <desc>Recovery run</desc>
+      </training>
+      <training name="Easy Aerobic 1">
+        <pace rule="1" value="0.7" />
+        <desc>Easy aerobic run level 1</desc>
+      </training>
+      <training name="Easy Aerobic 2">
+        <pace rule="1" value="0.73" />
+        <desc>Easy aerobic run level 2</desc>
+      </training>
+      <training name="Easy Aerobic 3">
+        <pace rule="1" value="0.75" />
+        <desc>Easy aerobic run level 3</desc>
+      </training>
+      <training name="Marathon Pace">
+        <pace rule="4" value="0" op="-" />
+        <desc>Marathon pace</desc>
+      </training>
+      <training name="Threshold Running">
+        <pace rule="2" value="0.88" />
+        <desc>Tempo run or cruise intervals</desc>
+      </training>
+      <training name="Interval Training">
+        <pace rule="2" value="1" />
+        <desc>Speed Intervals</desc>
+      </training>
+      <training name="Repetition Training">
+        <pace rule="2" value="1.2" />
+        <desc>Repetitions for improving aerobic power</desc>
+      </training>
+    </trainings>
+  </plan>
+  <plan name="Hansons Marathon Method">
+    <trainings>
+      <training name="Recovery">
+        <pace rule="1" value="0.65" />
+        <desc>Recovery run</desc>
+      </training>
+      <training name="Easy Aerobic 1">
+        <pace rule="1" value="0.693" />
+        <desc>Easy aerobic run level 1</desc>
+      </training>
+      <training name="Easy Aerobic 2">
+        <pace rule="1" value="0.743" />
+        <desc>Easy aerobic run level 2</desc>
+      </training>
+      <training name="Long Run">
+        <pace rule="1" value="0.775" />
+        <desc>Long run</desc>
+      </training>
+      <training name="Tempo">
+        <pace rule="4" value="0" op="-"/>
+        <desc>In Hansons Marathon Method, tempo run should be with marathon pace.</desc>
+      </training>
+      <training name="Strength">
+        <pace rule="4" value="10" op="-" />
+        <desc>Lactate threshold training.</desc>
+      </training>
+      <training name="Speed Workouts level 1">
+        <pace rule="3" value="10.0" />
+        <desc>VO2Max training level 1(10k pace)</desc>
+      </training>
+      <training name="Speed Workouts level 2">
+        <pace rule="3" value="5.0" />
+        <desc>VO2Max training level 2(5k pace)</desc>
+      </training>
+    </trainings>
+  </plan>
+  <plan name="Advanced Marathoning">
+    <trainings>
+      <training name="Easy">
+        <pace rule="1" value="0.65" />
+        <desc>Recovery run</desc>
+      </training>
+      <training name="General Aerobic">
+        <pace rule="1" value="0.693" />
+        <desc>Easy aerobic run level 1</desc>
+      </training>
+      <training name="Long Run Start">
+        <pace rule="4" value="1.2" op='*' />
+        <pace rule="4" value="1.1" op='*' />
+        <desc>Long run pace, AM recommends long run starting from mpx1.2, ending with mpx1.1</desc>
+      </training>
+      <training name="Lactate Threshold level 1">
+        <pace rule="3" value="21.0975" />
+        <desc>Steady Lactate Threshold run, in half marathon pace</desc>
+      </training>
+      <training name="Lactate Threshold level 2">
+        <pace rule="3" value="15.0" />
+        <desc>Cruise intervals(LT split), in 15k race pace</desc>
+      </training>
+      <training name="VO2 Max">
+        <pace rule="3" value="5.0" />
+        <desc>VO2Max Training, in 5k race pace</desc>
+      </training>
+    </trainings>
+  </plan>
+</plans>
