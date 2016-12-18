@@ -1,9 +1,12 @@
 #!/usr/bin/python
+"""
+training: data structures for storing training plans
+
+#  Copyright 2016 Guanyu Wang
+"""
+
 from formula import MI_KM_RATIO, time_eq, vdot, pace_calc
 import xml.etree.ElementTree as ET
-"""
-Data structures
-"""
 ################################################################################
 
 MARATHON_KM = 42.195
@@ -133,6 +136,9 @@ class TrainingPlan:
     return ret
 
 def loadTrainingPlans(xml_file):
+  """
+  Load training plans from XML file
+  """
   tree = ET.parse(xml_file)
   root = tree.getroot()
   ret = {} 
