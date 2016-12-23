@@ -8,9 +8,6 @@ Jack Daniels Running Formula
 ################################################################################
 MI_KM_RATIO = 1.609344
 
-# Percent of max heart rate
-PCT_LT = 0.88
-
 """
 Given a race time or race goal time, get the equivalant time of
 a race of another distance
@@ -44,7 +41,7 @@ def vo2(dist, time):
 
 
 """
-Percent of VO2 Max
+Percent of VO2 Max given a race time
 params:
 time: int, in seconds
 """
@@ -65,6 +62,7 @@ def vdot(dist, time, unit="mi"):
   dist *= 1000.0
   if unit == 'mi': dist *= MI_KM_RATIO
   return vo2(dist, time)/vo2max_percent(time)
+
 
 """
 Calculate the corresponding training pace given % of heart rate and vdot
