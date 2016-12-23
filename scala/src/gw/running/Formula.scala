@@ -6,15 +6,15 @@ object Formula {
   val MI_KM_RATIO : Double = 1.609344
   
   /*
-	 * Given a race time or race goal time, get the equivalant time of
-	 * a race of another distance
-	 * Exp: Marathon - 3:00:00 => Half Marathon - ?
-	 * Params:
-	 * t_given: Integer, race time in seconds
-	 * d_given: Double, race distance
-	 * d_target: Double, distance of the race to be predicted
-	 * unit: Unit, MI or KM
-	 */
+   * Given a race time or race goal time, get the equivalant time of
+   * a race of another distance
+   * Exp: Marathon - 3:00:00 => Half Marathon - ?
+   * Params:
+   * t_given: Integer, race time in seconds
+   * d_given: Double, race distance
+   * d_target: Double, distance of the race to be predicted
+   * unit: Unit, MI or KM
+   */
   def time_eq(time_given : Int, dist_given : Double, 
               dist_target : Double, unit : Unit) : Int = {
     var (d_given, d_target) = (dist_given, dist_target)
@@ -58,7 +58,7 @@ object Formula {
    * distance: Double
    * time: Int, in seconds
    * unit: Unit, MI or KM
-	 */
+   */
   def vdot(distance : Double, time : Int, unit : Unit): Double = {
     var dist = distance*1000.0
     if (unit == MI) dist *= MI_KM_RATIO
@@ -66,11 +66,11 @@ object Formula {
   }
   
   /*
-	 * Calculate the corresponding training pace given % of heart rate and vdot
-	 * Params:
-	 * percent_max: Double, percentage of vo2max
-	 * vdot: Double, vdot value
-	 */
+   * Calculate the corresponding training pace given % of heart rate and vdot
+   * Params:
+   * percent_max: Double, percentage of vo2max
+   * vdot: Double, vdot value
+   */
   def pace_calc(percent_max : Double, vdot : Double, unit : Unit): Int = {
     val adjusted_vdot = vdot*percent_max
     var pace = 1609.344*60.0 / (29.54+5.000663*adjusted_vdot - 
