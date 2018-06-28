@@ -17,12 +17,16 @@ import requests
 from pytz import timezone
 
 
-# constants
+# url constants
 ATHLETE_URL = "https://www.strava.com/api/v3/athlete"
 ATHLETES_URL = "https://www.strava.com/api/v3/athletes/{}"
 ACTIVITIES_URL = "https://www.strava.com/api/v3/activities/{}"
 ATHLETE_ACTIVITIES_URL = "https://www.strava.com/api/v3/athlete/activities"
 CLUBS_URL = "https://www.strava.com/api/v3/clubs/{}{}"
+
+# other constants
+METERS_PER_KM = 1000.0
+METERS_PER_MI = 1609.0
 
 # functions
 def get_start_of_week(time_zone='UTC'):
@@ -44,14 +48,14 @@ def convert_datestr(date_str, time_zone='UTC'):
 
 def process_activity(activity, unit='mi'):
   """
-  Convert the distance and pace
+  Convert the distance and calculate average pace
   """
   if unit == 'km':
-    activity['distance'] = activity['distance']/1000.0
-  else: activity['distance'] = activity['distance']/1609.0
+    activity['distance'] = activity['distance'] / METERS_PER_KM
+  else: activity['distance'] = activity['distance'] / METERS_PER_MI
   moving_time = float(activity['moving_time'])
   if activity['distance'] > 0:
-    activity['avg_pace'] = moving_time/(60.0*activity['distance'])
+    activity['avg_pace'] = moving_time / (60.0*activity['distance'])
   else:
     activity['avg_pace'] = 999
   return activity
