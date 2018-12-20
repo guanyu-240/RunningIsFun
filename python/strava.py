@@ -66,46 +66,44 @@ class Strava():
   """
   Strava access methods
   """
-  def __init__(self, access_token):
-    self.__accessToken = access_token
   
   """
   Basic queries
   """
   # Methods for getting athlete information
-  def getAthleteInfoSelf(self):
+  def getAthleteInfoSelf(self, access_token):
     """
     Get the information of self
     """
-    params = {'access_token': self.__accessToken}
+    params = {'access_token': access_token}
     r = requests.get(ATHLETE_URL, params)
     r.raise_for_status()
     return r.json()
 
 
-  def getAthleteInfo(self, user_id):
+  def getAthleteInfo(self, access_token, user_id):
     """
     Get the information of an athlete
     user_id: integer, strava id for the athlete
     """
-    params = {'access_token': self.__accessToken}
+    params = {'access_token': access_token}
     r = requests.get(ATHLETES_URL.format(user_id), params)
     r.raise_for_status()
     return r.json()
 
 
   # Methods for getting activity information
-  def getAnActivity(self, activity_id):
+  def getAnActivity(self, access_token, activity_id):
     """
     Get the information of an activity
     activity_id: integer, activity id
     """
-    params = {'access_token': self.__accessToken}
+    params = {'access_token': access_token}
     r = requests.get(ACTIVITIESS_URL.format(activity_id), params)
     r.raise_for_status()
     return r.json()
 
-  def listAthleteActivities(self, before=None, after=None, page=None, per_page=None):
+  def listAthleteActivities(self, access_token, before=None, after=None, page=None, per_page=None):
     """
     Get a list of activities
     before:   integer, seconds since UNIX epoch
@@ -113,7 +111,7 @@ class Strava():
     page:     integer
     per_page:	integer
     """
-    params = {'access_token': self.__accessToken}
+    params = {'access_token': access_token}
     if before: params['before'] = before
     if after: params['after'] = after
     if page: params['page'] = page
@@ -121,14 +119,14 @@ class Strava():
     r = requests.get(ATHLETE_ACTIVITIES_URL, params=params)
     return r.json()
 
-  def listFriendsActivities(self, before=None, page=None, per_page=None):
+  def listFriendsActivities(self, access_token, before=None, page=None, per_page=None):
     """
     Get a list of friends' activities
     before:   integer, seconds since UNIX epoch
     page:     integer
     per_page: integer
     """
-    params = {'access_token': self.__accessToken}
+    params = {'access_token': access_token}
     if before: params['before'] = before
     if page: params['page'] = page
     if per_page: params['per_page'] = per_page
@@ -136,24 +134,24 @@ class Strava():
     return r.json()
 
   # Methods for getting club information
-  def getClub(self, club_id):
+  def getClub(self, access_token, club_id):
     """
     Get the information of a club
     club_id: integer
     """
-    params = {'access_token': self.__accessToken}
+    params = {'access_token': access_token}
     r =  requests.get(CLUBS_URL.format(club_id, ''), params=params)
     r.raise_for_status()
     return r.json()
 
-  def listClubMembers(self, club_id, page=None, per_page=200):
+  def listClubMembers(self, access_token, club_id, page=None, per_page=200):
     """
     Get the list of club members
     club_id:  integer
     page:     integer
     per_page: integer
     """
-    params = {'access_token': self.__accessToken}
+    params = {'access_token': access_token}
     if page: params['page'] = page
     if per_page: params['per_page'] = per_page
     r =  requests.get(CLUBS_URL.format(club_id, '/members'), params=params) 

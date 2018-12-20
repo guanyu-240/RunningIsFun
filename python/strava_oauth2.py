@@ -43,7 +43,7 @@ class StravaAuth():
     params_list = (('client_id', self.__clientID), \
               ('redirect_uri', self.__redirectURI), \
               ('response_type', 'code'), \
-              ('scope', 'write'), \
+              ('scope', 'activity:read_all'), \
               ('state', 'mystate'), \
               ('approval_prompt', 'force'))
     params = urllib.urlencode(params_list, doseq=True)
@@ -57,6 +57,17 @@ class StravaAuth():
               'client_secret': self.__clientSecret, \
               'code': auth_code}
     r = requests.post(STRAVA_AUTHTOKEN_URL, data=params)
-    print r.text
+    #r.raise_for_status()
+    return r.json()
+
+  def refresh_token(self, refresh_token):
+    """
+    Refresh access token
+    """
+    params = {'client_id': self.__clientID, \
+              'client_secret': self.__clientSecret, \
+              'grant_type': 'refresh_token', \
+              'refresh_token': refresh_token}
+    r = requests.post(STRAVA_AUTHTOKEN_URL, data=params)
     #r.raise_for_status()
     return r.json()
