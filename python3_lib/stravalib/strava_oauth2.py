@@ -4,8 +4,8 @@
 #
 ################################################################################
 # standard imports
-import urllib
-import ConfigParser
+import urllib.request, urllib.parse, urllib.error
+import configparser
 # pypi
 import requests
 
@@ -31,7 +31,7 @@ class StravaAuth():
     self.__clientSecret = auth_cfg.get("strava_api", "client_secret")
 
   def __getAuthConfig(self, cfg_file):
-    auth_cfg = ConfigParser.RawConfigParser()
+    auth_cfg = configparser.RawConfigParser()
     auth_cfg.read(cfg_file)
     return auth_cfg
 
@@ -45,7 +45,7 @@ class StravaAuth():
               ('scope', 'activity:read_all'), \
               ('state', 'mystate'), \
               ('approval_prompt', 'force'))
-    params = urllib.urlencode(params_list, doseq=True)
+    params = urllib.parse.urlencode(params_list, doseq=True)
     return STRAVA_AUTH_URL.format(params)
 
   def token_exchange(self, auth_code):

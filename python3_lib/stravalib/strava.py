@@ -6,7 +6,7 @@
 
 # standard imports
 import os
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import json
 from datetime import date,timedelta,datetime
 
